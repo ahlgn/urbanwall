@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script>
+        $(function () {
+            $("#btnshowinfo").click(function(){
+                alert("正在提交请求");
+                $.ajax({
+                    headers:{
+                        "Token" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NTg1Mzc1NjgsImV4cCI6MTU1ODYyMzk2OCwidXNlcm5hbWUiOiLniYflj7bkuI3msr7ouqsiLCJpc3MiOiJwYW5kYSJ9.T3iIEnoIg0He17YojPBdU1vlqr8Zz0GYZcXy_v3fLmY"
+                    },
+                    type: "get",
+                    url:"https://localhost/userinfo/showuserinfo/"+$("#username").val(),
+                    contentType: "application/json; charset=utf-8",
+                    dataType:'JSON',
+                    success: function(result){
+                        console.log(result);
+                        $("#id").val(result.id);
+                        $("#userid").val(result.userid);
+                        $("#username").val(result.username);
+                        $("#usericon").val(result.usericon);
+                        $("#userbir").val(result.userbirthday);
+                        $("#userph").val(result.userphone);
+                        $("#usersex").val(result.usersex);
+                        $("#usere").val(result.useremail);
+
+                        alert(result.id+'|'+result.userid+'|'+result.username+'|'+result.sex);
+                    },
+                    error: function(){
+                        alert("error");
+                    }
+                });
+            });
+
+            /*           修改用户信息            */
+
+            $("#updateinfo").click(function () {
+                alert("正在提交请求");
+                var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NTg3MTQ0MjAsImV4cCI6MTU1ODgwMDgyMCwidXNlcm5hbWUiOiLniYflj7bkuI3msr7ouqsiLCJpc3MiOiJwYW5kYSJ9.U48Kljs0CMXfXzQypFdBz52NzF1-Kst2ak_cBSwOV_o";
+                $.ajax({
+                    serviceType: "defaultCall",
+                    headers: {
+                        "token": token
+                    },
+                    data: JSON.stringify({
+                        "id":$("#id").val(),
+                        "userid": $("#userid").val(),
+                        "username": $("#username").val(),
+                        "usericon": $("#usericon").val(),
+                        "usersex": $("#usersex").val(),
+                        "userbirthday": $("#userbir").val(),
+                        "userphone": $("#userph").val(),
+                        "useremail":$("#usere").val()
+                    }),
+                    type: "post",
+                    url: "https://localhost/userinfo/updateuserinfo",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'JSON',
+                    success: function (result) {
+                        console.log(result);
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+            });
+        })
+
+
+    </script>
+</head>
+<body>
+<table>
+    <tr>
+        <td>id</td>
+        <td><input id="id" value="10000006"/></td>
+    </tr>
+    <tr>
+        <td>userid</td>
+        <td><input id="userid" value="90281FF732C5437C8FA236FA72E16D19"/></td>
+    </tr>
+    <tr>
+        <td>username</td>
+        <td><input id="username" value="片叶不沾身"/></td>
+    </tr>
+    <tr>
+        <td>usericon</td>
+        <td><input id="usericon" /></td>
+    </tr>
+    <tr>
+        <td>usersex</td>
+        <td><input id="usersex" /></td>
+    </tr>
+    <tr>
+        <td>userbir</td>
+        <td><input id="userbir" /></td>
+    </tr>
+    <tr>
+        <td>userph</td>
+        <td><input id="userph" /></td>
+    </tr>
+    <tr>
+        <td>usere</td>
+        <td><input id="usere" /></td>
+    </tr>
+    <tr>
+        <td><button id="btnshowinfo">显示信息</button></td>
+        <td><button id="updateinfo">修改信息</button></td>
+    </tr>
+
+</table>
+</body>
+</html>

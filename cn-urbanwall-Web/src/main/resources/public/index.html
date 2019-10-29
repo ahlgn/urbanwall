@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="#" />
+    <link type="text/css" rel="styleSheet"  href="css/r_login.css" />
+	<script type="text/javascript" src="jquery.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script>
+            $(function () {
+                var code;
+                $.ajax({
+                    type: "get",
+                    url: "https://localhost/code/getCode",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'JSON',
+                    success: function (img) {
+                        var imgcode = img.img.replace(/\r/g, "").replace(/\n/g, "");
+                        $("#codeimg").attr('src', "data:image/jpeg;base64," + imgcode);
+                        code= window.atob(img.code);
+                    },
+                    error: function () {
+                        alert("获取验证码失败");
+                    }
+                });
+                $("#codeimg").click(function(){
+                    $.ajax({
+                        type: "get",
+                        url: "https://localhost/code/getCode",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: 'JSON',
+                        success: function (img) {
+                            var imgcode = img.img.replace(/\r/g, "").replace(/\n/g, "");
+                            $("#codeimg").attr('src', "data:image/jpeg;base64," + imgcode);
+                            code= window.atob(img.code);
+                        },
+                        error: function () {
+                            alert("获取验证码失败");
+                        }
+                    });
+                });
+
+                $("#btn").click(function(){
+                    if(code==$("#codenum").val()){
+                        alert("正确");
+                    }else{
+                        alert("错误");
+                    }
+                });
+                $("#btnregister").click(function(){
+                    alert("正在提交请求");
+                    $.ajax({
+						headers:{
+							"Token" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NTg1Mzc1NjgsImV4cCI6MTU1ODYyMzk2OCwidXNlcm5hbWUiOiLniYflj7bkuI3msr7ouqsiLCJpc3MiOiJwYW5kYSJ9.T3iIEnoIg0He17YojPBdU1vlqr8Zz0GYZcXy_v3fLmY"
+						},
+                        type: "get",
+                        url:"https://localhost/user/username=="+$("#user").val(),
+                        contentType: "application/json; charset=utf-8",
+                        dataType:'JSON',
+                        success: function(result){
+							alert(result.id+'|'+result.userid+'|'+result.username+'|'+result.sex);
+                        },
+                        error: function(){
+                            alert("error");
+                        }
+                    });
+                });
+            })
+	</script>
+    <title>账号注册</title>
+</head>
+<body>
+    <div id="bg">
+        <div id="login_wrap">
+            <div id="login">
+                <div id="r_status">
+                    <i style="top: 0px">用户注册</i>
+                </div>
+                <span>
+                    <form action="post">
+                        <p class="form"><input type="text" id="user" name="username" placeholder="账号/用户名"></p>
+                        <p class="form"><input type="password" id="passwd" name="userpassword" placeholder="密码"></p>
+                        <p class="form confirm"><input type="password" name="ruserpassword" id="confirm-passwd" placeholder="确认密码"></p>
+                        <p class="form"><input type="text"name="userphone" id="userphone" placeholder="手机号"></p>
+                        <p><img id="codeimg"></p>
+                        <p class="form"><input type="text" id="codenum" placeholder="校验码"></p>
+                        <input type="button"  value="注册" class="btn"  id="btnregister">
+                        <input type="button" value="测试校验验证码" id="btn">
+                    </form>
+                </span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

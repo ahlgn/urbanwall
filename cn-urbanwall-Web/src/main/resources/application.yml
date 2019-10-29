@@ -1,0 +1,76 @@
+server:
+  ssl:
+    key-store: classpath:urbanwall.pfx
+    key-store-password: 3CD6LPte
+    key-store-type: PKCS12
+    enabled: true
+  port: 443
+spring:
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  datasource:
+    username: root     #clients
+    password: root  #thisisclient
+    url: jdbc:mysql://47.103.1.87:3307/urbanwall_test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #配置druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 5
+    minIdle: 5
+    maxActive: 50
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,log4j2
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  #ActiveMQ消息队列配置
+  activemq:
+    broker-url: tcp://47.103.1.87:61617
+    in-memory: true
+    pool:
+      enabled: false
+    packages:
+      trust-all: true
+  #redis配置
+  redis:
+    database: 1
+    host: 47.103.1.87
+    port: 6380
+    password: root
+    jedis:
+      pool:
+        max-active: 50
+        max-wait: -1
+        min-idle: 0
+    timeout: 6000
+#与webconfig冲突
+#    mvc:
+#      static-path-pattern: /static/**
+#    resources:
+#      static-locations: classpath:/static/,classpath:/templates/,classpath:/**,classpath:/public/
+
+#mybatis配置 扫描mapper 和对应实体类的包名
+#公共配置与profiles选择无关
+mybatis:
+  mapper-locations: classpath:mapper/*
+  type-aliases-package: cn.urbanwall.model
+  #支持驼峰命名法
+  configuration:
+    map-underscore-to-camel-case: true
+
+    
+#文件上传路径配置
+application:
+# prop: /home/headimages/
+ profile: D:/Images/
+ profileicon: D:/ImagesIcon/

@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.urbanwall.dao.TbWallerMapper" >
+  <resultMap id="BaseResultMap" type="cn.urbanwall.model.TbWaller" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="send_userid" property="sendUserid" jdbcType="VARCHAR" />
+    <result column="send_username" property="sendUsername" jdbcType="VARCHAR" />
+    <result column="waller" property="waller" jdbcType="VARCHAR" />
+    <result column="picture" property="picture" jdbcType="VARCHAR" />
+    <result column="emotion" property="emotion" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="school" property="school" jdbcType="VARCHAR" />
+    <result column="sendtime" property="sendtime" jdbcType="DATE" />
+  </resultMap>
+  <resultMap id="WallShowMap" type="cn.urbanwall.quervo.WallView" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="send_userid" property="sendUserid" jdbcType="VARCHAR" />
+    <result column="send_username" property="sendUsername" jdbcType="VARCHAR" />
+    <result column="usericon" property="usericon" jdbcType="VARCHAR" />
+    <result column="waller" property="waller" jdbcType="VARCHAR" />
+    <result column="picture" property="picture" jdbcType="VARCHAR" />
+    <result column="emotion" property="emotion" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="school" property="school" jdbcType="VARCHAR" />
+    <result column="sendtime" property="sendtime" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, send_userid, send_username, waller, picture, emotion, address, school, sendtime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.urbanwall.model.TbWallerExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_waller
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_waller
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_waller
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="cn.urbanwall.model.TbWallerExample" >
+    delete from tb_waller
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="cn.urbanwall.model.TbWaller" >
+    insert into tb_waller (id, send_userid, send_username, 
+      waller, picture, emotion, 
+      address, school, sendtime
+      )
+    values (#{id,jdbcType=BIGINT}, #{sendUserid,jdbcType=VARCHAR}, #{sendUsername,jdbcType=VARCHAR}, 
+      #{waller,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, #{emotion,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{school,jdbcType=VARCHAR}, #{sendtime,jdbcType=DATE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.urbanwall.model.TbWaller" >
+    insert into tb_waller
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="sendUserid != null" >
+        send_userid,
+      </if>
+      <if test="sendUsername != null" >
+        send_username,
+      </if>
+      <if test="waller != null" >
+        waller,
+      </if>
+      <if test="picture != null" >
+        picture,
+      </if>
+      <if test="emotion != null" >
+        emotion,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="school != null" >
+        school,
+      </if>
+      <if test="sendtime != null" >
+        sendtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="sendUserid != null" >
+        #{sendUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="sendUsername != null" >
+        #{sendUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="waller != null" >
+        #{waller,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null" >
+        #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="emotion != null" >
+        #{emotion,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="school != null" >
+        #{school,jdbcType=VARCHAR},
+      </if>
+      <if test="sendtime != null" >
+        #{sendtime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="cn.urbanwall.model.TbWallerExample" resultType="java.lang.Integer" >
+    select count(*) from tb_waller
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_waller
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.sendUserid != null" >
+        send_userid = #{record.sendUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sendUsername != null" >
+        send_username = #{record.sendUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="record.waller != null" >
+        waller = #{record.waller,jdbcType=VARCHAR},
+      </if>
+      <if test="record.picture != null" >
+        picture = #{record.picture,jdbcType=VARCHAR},
+      </if>
+      <if test="record.emotion != null" >
+        emotion = #{record.emotion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.school != null" >
+        school = #{record.school,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sendtime != null" >
+        sendtime = #{record.sendtime,jdbcType=DATE},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_waller
+    set id = #{record.id,jdbcType=BIGINT},
+      send_userid = #{record.sendUserid,jdbcType=VARCHAR},
+      send_username = #{record.sendUsername,jdbcType=VARCHAR},
+      waller = #{record.waller,jdbcType=VARCHAR},
+      picture = #{record.picture,jdbcType=VARCHAR},
+      emotion = #{record.emotion,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      school = #{record.school,jdbcType=VARCHAR},
+      sendtime = #{record.sendtime,jdbcType=DATE}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.urbanwall.model.TbWaller" >
+    update tb_waller
+    <set >
+      <if test="sendUserid != null" >
+        send_userid = #{sendUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="sendUsername != null" >
+        send_username = #{sendUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="waller != null" >
+        waller = #{waller,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null" >
+        picture = #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="emotion != null" >
+        emotion = #{emotion,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="school != null" >
+        school = #{school,jdbcType=VARCHAR},
+      </if>
+      <if test="sendtime != null" >
+        sendtime = #{sendtime,jdbcType=DATE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.urbanwall.model.TbWaller" >
+    update tb_waller
+    set send_userid = #{sendUserid,jdbcType=VARCHAR},
+      send_username = #{sendUsername,jdbcType=VARCHAR},
+      waller = #{waller,jdbcType=VARCHAR},
+      picture = #{picture,jdbcType=VARCHAR},
+      emotion = #{emotion,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      school = #{school,jdbcType=VARCHAR},
+      sendtime = #{sendtime,jdbcType=DATE}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+ <!--自定义sql语句-->
+  <!-- 根据学校查询最新消息 （倒叙查询）limit -->
+  <select id="selectBySchoolAndPage" parameterType="map"  resultMap="BaseResultMap" >
+    select *
+    from tb_waller
+    where school = #{school}
+    ORDER BY id DESC
+    limit #{page},#{pageSize}
+  </select>
+  <!-- 根据学校查询最新消息 （倒叙查询）limit -->
+  <select id="selectWallView" parameterType="map"  resultMap="WallShowMap" >
+    SELECT w.id,
+    w.send_userid,
+    w.send_username,
+    u.userIcon,
+    w.waller,
+    w.picture,
+    w.address,
+    w.school,
+    w.sendtime
+    FROM tb_waller w,
+    tb_userbase u
+    WHERE w.send_userid=u.userid
+    AND w.school = #{school}
+    ORDER BY w.id DESC
+    LIMIT #{page},#{pageSize}
+  </select>
+  <!-- 查询个人已发的墙-->
+  <select id="selectWallByUserId" parameterType="java.lang.String"  resultMap="WallShowMap" >
+    SELECT w.id,
+    w.send_userid,
+    w.send_username,
+    u.userIcon,
+    w.waller,
+    w.picture,
+    w.address,
+    w.school,
+    w.sendtime
+    FROM tb_waller w,
+    tb_userbase u
+    WHERE w.send_userid=u.userid
+    AND w.send_userid= #{userid}
+    ORDER BY w.id DESC
+  </select>
+</mapper>

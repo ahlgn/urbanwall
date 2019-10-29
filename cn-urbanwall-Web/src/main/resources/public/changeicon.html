@@ -1,0 +1,67 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UploadFile</title>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script>
+	$(function () {
+		$("#btnup").click(function () {
+            alert("正在提交请求！")
+			var file = $("#file").get(0).files[0];
+			var url = "https://localhost/userinfo/uploadicon";
+			var form = new FormData();
+			form.append("faceicon", file);
+			form.append("username",$("#username").val())
+			$.ajax({
+				headers: {
+					"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NTg1Mzc1NjgsImV4cCI6MTU1ODYyMzk2OCwidXNlcm5hbWUiOiLniYflj7bkuI3msr7ouqsiLCJpc3MiOiJwYW5kYSJ9.T3iIEnoIg0He17YojPBdU1vlqr8Zz0GYZcXy_v3fLmY"
+				},
+				type: "post",
+				url: url,
+				data: form,
+				contentType: false, //必须
+				processData: false, //必须
+				dataType: "json",
+				success: function (result) {
+					alert("上传成功！")
+					//清空上传文件的值
+					console.log("返回结果："+result);
+				}
+			});
+		});
+	})
+
+    window.onload = function () {
+        var fileTag = document.getElementById('file');
+        fileTag.onchange = function () {
+            var file = fileTag.files[0];
+            var fileReader = new FileReader();
+            fileReader.onloadend = function () {
+                if (fileReader.readyState == fileReader.DONE) {
+                    document.getElementById('img').setAttribute('src', fileReader.result);
+                }
+            };
+            fileReader.readAsDataURL(file);
+        };
+    };
+</script>
+
+</head>
+<body>
+   <div>
+        <img src="" id="img" style="width:200px;height:300px;" />
+    </div>
+    <input type="file" id="file" /></br>
+    <table>
+			<tr>
+				<td>username</td>
+				<td><input type="text" id="username" value="片叶不沾身"/></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<button id="btnup">更换头像</button>
+				</td>
+			</tr>
+		</table>
+</body>
+</html>

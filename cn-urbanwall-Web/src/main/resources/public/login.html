@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="jquery.cookies.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var baseurl="https://localhost/";
+            var codeNum;
+            $.ajax({
+                url:baseurl+"code/getCode",
+                type:'get',
+                contentType: "application/json; charset=utf-8",
+                dataType: 'JSON',
+                success:function (data) {
+                    //不识别json里\r\n 替换了
+                    var imgcode = data.img.replace(/\r/g, "").replace(/\n/g, "");
+                    $("#codeImage").attr('src', "data:image/jpeg;base64," + imgcode);
+                    //解析base64 code
+                    codeNum=window.atob(data.code);
+                }
+            });
+            $("#reloadimg").click(function(){
+                $.ajax({
+                    url:baseurl+"code/getCode",
+                    type:'get',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'JSON',
+                    success:function (data) {
+                        //不识别json里\r\n 替换了
+                        var imgcode = data.img.replace(/\r/g, "").replace(/\n/g, "");
+                        $("#codeImage").attr('src', "data:image/jpeg;base64," + imgcode);
+                        //解析base64 code
+                        codeNum=window.atob(data.code);
+                    }
+                });
+            });
+            $("#btnlogin").click(function () {
+                var inputcode=$("#codeNum").val();
+               if(codeNum==inputcode){
+                   $.ajax({
+                       url:baseurl+"user/login",
+                       type:'post',
+                       contentType: "application/json; charset=utf-8",
+                       dataType: 'JSON',
+                       data:JSON.stringify({
+                           'username':$("#username").val().trim(),
+                           'password':$("#password").val().trim()
+                       }),
+                       success:function (data) {
+                           var token =data.token;
+                           var username=data.username;
+                           $.cookie("urbantoken",token);
+                           $.cookie("urbanusername",username);
+                           window.location.href="https://localhost/main.html";
+                           alert("欢迎[["+username+"]]进入");
+                       },
+                       error:function () {
+                           alert("请求失败");
+                       }
+                   });
+               }else{
+                   alert("验证码错误");
+               }
+            });
+        });
+    </script>
+</head>
+<body>
+<table align="center" border="2">
+    <tr>
+        <td>用户名</td>
+        <td colspan="2"><input type="text" id="username"></td>
+    </tr>
+    <tr>
+        <td>密码</td>
+        <td colspan="2"><input type="password" id="password" ></td>
+    </tr>
+    <tr>
+        <td>验证码</td>
+        <td><input type="text" id="codeNum" ></td>
+    </tr>
+    <tr>
+        <td><img width="120" height="40" id="codeImage"></td>
+        <td><p id="reloadimg">看不清?</p></td>
+    </tr>
+    <tr>
+        <td><input type="button" value="登录" id="btnlogin"> </td>
+        <td><a href="https://localhost/register.html" style="color:blue">注册</a></td>
+    </tr>
+</table>
+</body>
+</html>

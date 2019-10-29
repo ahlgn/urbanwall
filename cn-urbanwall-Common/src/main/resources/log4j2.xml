@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="OFF">
+    <!--定义公共输出格式-->
+    <Properties>
+        <Property name="pattern">%d{yyyy.MM.dd 'at' HH:mm:ss z} %-5level %class{36} %M() @%L - %msg%n</Property>
+    </Properties>
+    <Appenders name="UserController" class="cn.urbanwall.controller.UserController">
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!--输出格式-->
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+        </Console>
+        <File name="ERROR" fileName="logs/UserController/error.log" append="false">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{yyyy.MM.dd 'at' HH:mm:ss z} %-5level %class{36} %M() @%L - %msg%n"/>
+        </File>
+        <!--这个会打印出所有的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
+        <RollingFile name="RollingFile" fileName="logs/usercontroller/app.log"
+                     filePattern="UserController/$${date:yyyy-MM-dd}/app-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <!--设置按天保存-->
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <!--<SizeBasedTriggeringPolicy size="1 KB"/>-->
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Appenders name="WebApplication" class="cn.urbanwall.WebApplication">
+        <Console name="Console1" target="SYSTEM_OUT">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!--输出格式-->
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+        </Console>
+        <File name="ERROR1" fileName="logs/WebApplication/error.log" append="false">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{yyyy.MM.dd 'at' HH:mm:ss z} %-5level %class{36} %M() @%L - %msg%n"/>
+        </File>
+        <!--这个会打印出所有的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
+        <RollingFile name="RollingFile1" fileName="logs/WebApplication/app.log"
+                     filePattern="WebApplication/$${date:yyyy-MM-dd}/app-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <!--设置按天保存-->
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <!--<SizeBasedTriggeringPolicy size="1 KB"/>-->
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <!--对应每个-->
+        <Root level="INFO">
+            <appender-ref ref="ERROR" />
+            <appender-ref ref="RollingFile"/>
+            <appender-ref ref="Console"/>
+        </Root>
+        <Root level="INFO">
+            <appender-ref ref="ERROR1" />
+            <appender-ref ref="RollingFile1"/>
+            <appender-ref ref="Console1"/>
+        </Root>
+    </Loggers>
+</Configuration>

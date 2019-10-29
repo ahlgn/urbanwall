@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script>
+        $(function () {
+            var picpath;
+            $("#btn").click(function () {
+                alert("正在提交请求");
+                var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NTg3MTQ0MjAsImV4cCI6MTU1ODgwMDgyMCwidXNlcm5hbWUiOiLniYflj7bkuI3msr7ouqsiLCJpc3MiOiJwYW5kYSJ9.U48Kljs0CMXfXzQypFdBz52NzF1-Kst2ak_cBSwOV_o";
+                $.ajax({
+                    serviceType: "defaultCall",
+                    headers: {
+                        "token": token
+                    },
+                    data: JSON.stringify({
+                        "sendUserid": $("#userid").val(),
+                        "sendUsername": $("#username").val(),
+                        "waller": $("#waller").val(),
+                        "picture": picpath,
+                        "address": $("#shen").val() + "#" + $("#shi").val(),
+                        "school": $("#xuexiao").val()
+                    }),
+                    type: "post",
+                    url: "https://localhost/wall/sendwaller",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'JSON',
+                    success: function (result) {
+
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+            });
+            $("#btnup").click(function () {
+
+                var file = $("#file").get(0).files[0];
+                var url = "https://localhost/wall/uploadpicture";
+                var form = new FormData();
+                form.append("picture", file);
+                $.ajax({
+                    headers: {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NTg1Mzc1NjgsImV4cCI6MTU1ODYyMzk2OCwidXNlcm5hbWUiOiLniYflj7bkuI3msr7ouqsiLCJpc3MiOiJwYW5kYSJ9.T3iIEnoIg0He17YojPBdU1vlqr8Zz0GYZcXy_v3fLmY"
+                    },
+                    type: "post",
+                    url: url,
+                    data: form,
+                    contentType: false, //必须
+                    processData: false, //必须
+                    dataType: "json",
+                    success: function (res) {
+                        //清空上传文件的值
+                        picpath = res.path;
+                        $("#img").attr("src", "https://localhost/wallImages/" + picpath);
+                    }
+                });
+            });
+
+            var imgpath = "https://localhost/wallImages/"
+            $("#btntest").click(function () {
+                var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NTg3MTQ0MjAsImV4cCI6MTU1ODgwMDgyMCwidXNlcm5hbWUiOiLniYflj7bkuI3msr7ouqsiLCJpc3MiOiJwYW5kYSJ9.U48Kljs0CMXfXzQypFdBz52NzF1-Kst2ak_cBSwOV_o";
+                $.ajax({
+                    serviceType: "defaultCall",
+                    headers: {
+                        "token": token
+                    },
+                    type: "get",
+                    url: "https://localhost/wall/wallof" + "蚌埠学院",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'JSON',
+                    success: function (result) {
+                        $("#huser").html(result.sendUsername);
+                        $("#hwall").html(result.waller);
+                        $("#himg").attr("src", imgpath + result.picture);
+                        $("#htime").html(result.sendtime);
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+            });
+        })
+
+
+    </script>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>用户id</td>
+            <td><input type="text" name="sendUserid" id="userid" value="90281FF732C5437C8FA236FA72E16D19" ></td>
+        </tr>
+        <tr>
+            <td>用户名</td>
+            <td><input type="text" name="sendUsername" id="username" value="片叶不沾身" ></td>
+        </tr>
+        <tr>
+            <td>留言</td>
+            <td><input type="text" name="waller" id="waller"></td>
+        </tr>
+        <tr>
+            <td>图片上传</td>
+            <td><input type="file" name="picture" id="file" ></td>
+            <td><img id="img" width="40" height="40"></td>
+            <td><input type="button" id="btnup"  value="上传"></td>
+        </tr>
+        <tr>
+            <td><input type="text" id="shen" ></td>
+            <td><input type="text" id="shi" ></td>
+            <td><input type="text" id="xuexiao"></td>
+        </tr>
+        <tr>
+            <td><input type="button" id="btn" value="发送"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td><input id="btntest" type="button" value="测试显示留言按钮"></td>
+        </tr>
+        <tr>
+            <td>用户名</td>
+            <td><h3 id="huser"></h3></td>
+        </tr>
+        <tr>
+            <td><h3 id="hwall"></h3></td>
+            <td><img id="himg" width="40" height="40" ></td>
+        </tr>
+        <tr>
+            <td><h3 id="htime"></h3></td>
+        </tr>
+    </table>
+</body>
+</html>
